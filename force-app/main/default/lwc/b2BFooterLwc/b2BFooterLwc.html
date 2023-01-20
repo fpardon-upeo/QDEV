@@ -1,0 +1,40 @@
+<template>
+    <lightning-layout class="general slds-grid_align-center" horizontal-align="center" vertical-align="center">
+        <lightning-layout-item size="2">
+            <img src ={sfimage} alt='Qteam Png'/>
+        </lightning-layout-item>
+        <lightning-layout-item size="3">
+            <div class="div1 slds-text-body_regular">{label.QTeamText}
+            </div>
+        </lightning-layout-item>
+        <lightning-layout-item size="2">
+            <lightning-vertical-navigation>
+                <lightning-vertical-navigation-section>
+                    <lightning-vertical-navigation-item label={label.Link1} name="policy1" href={label.URL1}></lightning-vertical-navigation-item>
+                    <lightning-vertical-navigation-item label={label.Link2}  name="policy2" href={label.URL2}></lightning-vertical-navigation-item>
+                    <lightning-vertical-navigation-item label={label.Link3}  name="policy3" href={label.URL3}></lightning-vertical-navigation-item>
+                 <!--   <lightning-vertical-navigation-item label={label.Link4}  name="policy4" href={label.URL4}></lightning-vertical-navigation-item>-->
+                 <!--<lightning-vertical-navigation-item label={label.Link5}  name="policy5" href={label.URL5}></lightning-vertical-navigation-item>-->
+                </lightning-vertical-navigation-section>
+            </lightning-vertical-navigation>
+        </lightning-layout-item>
+    </lightning-layout>
+    <div class="social">
+        <a href="https://www.facebook.com/qteam.be/">
+            <img src ={fbimage} alt='fbimage'/>
+        
+        </a>
+        &nbsp;
+        &nbsp;
+        <a href="https://www.youtube.com/user/QteamTires">
+            <img src ={ytbimage} alt='ytbimage'/>
+            
+        </a>
+    </div>
+    <div>
+        <p class="general"><br></p>
+    </div>
+    <div>
+        <p class="p-1">Copyright &copy; QTeam 2022</p>
+    </div>
+</template>

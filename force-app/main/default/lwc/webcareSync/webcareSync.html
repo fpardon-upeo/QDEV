@@ -1,0 +1,99 @@
+<!--
+ - Created by Frederik on 13/12/2022.
+ -->
+
+<!-- Webcare Sync -->
+<template>
+
+    <lightning-card title="Webcare Sync" icon-name="utility:sync">
+
+        <div class="slds-grid slds-size_8-of-12 slds-m-around_small">
+            <table>
+                <tr class="slds-m-bottom_medium">
+                    <td class="slds-size_1-of-12">
+                        <lightning-button variant="brand" stretch=true label="Get Suppliers" onclick={getWebCareSuppliers}></lightning-button>
+                    </td>
+                    <td style="width: 1%">
+                        <lightning-spinner class="spinnerHolder" if:true={supplierJobProcessing} alternative-text="Processing" size="small" variant="brand"></lightning-spinner>
+                        <lightning-icon class="slds-m-left_medium" icon-name="action:check" if:true={supplierJobCompleted} size="x-small"></lightning-icon>
+                    </td>
+                </tr>
+                <tr class="slds-m-bottom_medium">
+                    <td class="slds-size_1-of-12">
+                        <lightning-button variant="brand" stretch=true label="Get Profiles" onclick={getWebCareProfiles}></lightning-button>
+                    </td>
+                    <td style="width: 1%">
+                        <lightning-spinner class="spinnerHolder" if:true={profileJobProcessing} alternative-text="Processing" size="small" variant="brand"></lightning-spinner>
+                        <lightning-icon class="slds-m-left_medium" icon-name="action:check" if:true={profileJobCompleted} size="x-small"></lightning-icon>
+                    </td>
+                </tr>
+                <tr class="slds-m-bottom_medium">
+                    <td class="slds-size_1-of-12">
+                        <lightning-button variant="brand" stretch=true label="Get Brands" onclick={getWebCareBrands}></lightning-button>
+                    </td>
+                    <td style="width: 1%">
+                        <lightning-spinner class="spinnerHolder" if:true={brandJobProcessing} alternative-text="Processing" size="small" variant="brand"></lightning-spinner>
+                        <lightning-icon class="slds-m-left_medium" icon-name="action:check" if:true={brandJobCompleted} size="x-small"></lightning-icon>
+                    </td>
+                </tr>
+                <tr class="slds-m-bottom_medium">
+                    <td class="slds-size_1-of-12">
+                        <lightning-button variant="brand" stretch=true label="Get Transport Costs" onclick={getWebCareTransportCosts}></lightning-button>
+                    </td>
+                    <td style="width: 1%">
+                        <lightning-spinner class="spinnerHolder" if:true={transportJobProcessing} alternative-text="Processing" size="small" variant="brand"></lightning-spinner>
+                        <div class="slds-grid">
+                            <lightning-icon class="slds-m-left_medium slds-col" icon-name="action:check" if:true={transportJobCompleted} size="x-small"></lightning-icon>
+                            <lightning-formatted-text class="slds-col slds-align_absolute-center slds-m-left_medium" style="width: 250px;" value={transportCostJobId}></lightning-formatted-text>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="slds-m-bottom_medium">
+                    <td class="slds-size_1-of-12">
+                        <lightning-button variant="brand" stretch=true label="Get Customers" onclick={getWebCareCustomers}></lightning-button>
+                    </td>
+                    <td style="width: 1%">
+                        <lightning-spinner class="spinnerHolder" if:true={customerJobProcessing} alternative-text="Processing" size="small" variant="brand"></lightning-spinner>
+                        <div class="slds-grid">
+                            <lightning-icon class="slds-m-left_medium slds-col" icon-name="action:check" if:true={customerJobCompleted} size="x-small"></lightning-icon>
+                            <lightning-formatted-text class="slds-col slds-align_absolute-center slds-m-left_medium" style="width: 250px;" value={customerJobId}></lightning-formatted-text>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="slds-m-bottom_medium">
+                    <td class="slds-size_1-of-12">
+                        <lightning-button variant="brand" stretch=true label="Get Articles" onclick={getWebCareArticles}></lightning-button>
+                    </td>
+                    <td style="width: 1%">
+                        <lightning-spinner class="spinnerHolder" if:true={articleJobProcessing} alternative-text="Processing" size="small" variant="brand"></lightning-spinner>
+                        <lightning-icon class="slds-m-left_medium" icon-name="action:check" if:true={articleJobCompleted} size="x-small"></lightning-icon>
+                    </td>
+                    <td class="slds-size_3-of-12">
+                        <span if:true={articleJobProcessing}> {articleJobStatus} {articleJobItemsProcessed}/{articleJobItemsTotal} </span>
+                        <lightning-progress-bar if:true={articleJobProcessing} value={articleProgress}></lightning-progress-bar>
+                    </td>
+                </tr>
+                <tr class="slds-m-bottom_medium">
+                    <td class="slds-size_1-of-12">
+                        <lightning-button variant="brand" stretch=true label="Get Article Prices" onclick={getWebCareArticlePrices}></lightning-button>
+                    </td>
+                    <td style="width: 1%">
+                        <lightning-spinner class="spinnerHolder" if:true={articlePricesJobProcessing} alternative-text="Processing" size="small" variant="brand"></lightning-spinner>
+                        <lightning-icon class="slds-m-left_medium" icon-name="action:check" if:true={articlePricesJobCompleted} size="x-small"></lightning-icon>
+                    </td>
+                    <td class="slds-size_3-of-12">
+                        <span if:true={articlePricesJobProcessing}> {articlePricesJobStatus} {articlePricesJobItemsProcessed}/{articlePricesJobItemsTotal} </span>
+                        <lightning-progress-bar if:true={articlePricesJobProcessing} value={articlePricesProgress}></lightning-progress-bar>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+
+
+    </lightning-card>
+
+
+
+
+</template>

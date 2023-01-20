@@ -1,0 +1,142 @@
+/**
+ * Created by Frederik on 5/12/2022.
+ */
+ th {
+    text-align: center;
+    height:40px;
+    font-size: medium;
+    background: #f0f0f0;
+
+}
+td{
+    text-align:center;
+}
+
+lightning-formatted-rich-text{
+    margin-bottom: none;
+}
+
+.slds-rich-text-editor__output{
+    margin-bottom: none;
+}
+
+a{
+    color: #002F5E;
+}
+
+a:link {
+    color: green;
+    text-decoration: none;
+  }
+a:hover {
+    color: #f08293;
+    text-decoration: underline;
+  }
+
+
+.nth-table {
+    border-collapse: collapse;
+}
+.nth-table tbody:nth-child(odd){
+    background: #f0f0f0;
+}
+
+.supplier-image {
+    vertical-align: center;
+}
+
+.subrow {
+    background: unset;
+}
+
+.nth-table th{
+    padding:12px;
+}
+.nth-table td{
+    color: #002F5E;
+    padding:12px;
+    width:90px;
+}
+
+supplierblock {
+    border-bottom: 2px solid #47474b;
+}
+
+tr.topborder {
+    border-top: 2px solid #47474b;
+}
+
+.gfg {
+    empty-cells: hide;
+}
+
+th.descriptiontable, td.descriptiontable {
+    text-align: center;
+    height:40px;
+    border: none;
+}
+
+.boldtext {
+    font-weight: bold;
+}
+
+tr.descriptiontable {
+    text-align: center;
+    border: none;
+}
+
+table.descriptiontable {
+    border: none;
+}
+
+th.field {
+    width: 15%
+}
+
+/* th.label {
+    width: 25%
+} */
+th.subject {
+    width: 70%; /* Not necessary, since only 70% width remains */
+}
+
+.lightning-card{
+    display: block;
+}
+
+.infoTable{
+    width : 30%;
+}
+
+.productResult{
+    width : 70%;
+}
+
+@media only screen and (min-width: 64.01em) {
+    .producttable {
+        width: 90%;
+    }
+    .productbutton {
+        width: 10%;
+    }
+
+    .quantity-price-remove {
+        width: 60%;
+    }
+}
+
+/* Tablet sized screens or smaller (smaller than the SLDS mqLarge responsive threshold) */
+@media only screen and (max-width: 64em) {
+    .producttable {
+        width: 100%;
+    }
+
+}
+
+/* Small form factor: devices smaller than tablet (i.e. the SLDS mqSmall responsive threshold)*/
+@media only screen and (max-width: 47.9375em) {
+    .producttable {
+        width: 100%;
+    }
+
+}

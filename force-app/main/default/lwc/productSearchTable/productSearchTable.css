@@ -1,0 +1,88 @@
+/**
+ * Created by Frederik on 5/12/2022.
+ */
+th {
+    text-align: left;
+    height:40px;
+    font-size: medium;
+    background: #b6aeae;
+
+}
+
+lightning-formatted-rich-text{
+    margin-bottom: none;
+}
+
+.slds-rich-text-editor__output{
+    margin-bottom: none;
+}
+
+.nth-table {
+    border-collapse: collapse;
+}
+.nth-table tbody:nth-child(odd){
+    background: #b6aeae;
+}
+
+.supplier-image {
+    vertical-align: center;
+}
+
+.subrow {
+    background: unset;
+}
+
+.nth-table th{
+    padding:12px;
+}
+.nth-table td{
+    color: #002F5E;
+    padding:12px;
+    width:90px;
+}
+
+supplierblock {
+    border-bottom: 2px solid #47474b;
+}
+
+tr.topborder {
+    border-top: 2px solid #47474b;
+}
+
+.gfg {
+    empty-cells: hide;
+}
+
+th.descriptiontable, td.descriptiontable {
+    text-align: left;
+    height:40px;
+    border: none;
+}
+
+.boldtext {
+    font-weight: bold;
+}
+
+tr.descriptiontable {
+    text-align: left;
+    border: none;
+}
+
+table.descriptiontable {
+    border: none;
+}
+
+th.field {
+    width: 15%
+}
+
+th.label {
+    width: 25%
+}
+th.subject {
+    width: 70%; /* Not necessary, since only 70% width remains */
+}
+
+.lightning-card{
+    display: block;
+}

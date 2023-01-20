@@ -1,0 +1,9 @@
+th, td {
+    border:1px solid black;
+    text-align: center;
+    height:40px;
+  }
+  
+  .gfg {
+      empty-cells: hide;
+  }

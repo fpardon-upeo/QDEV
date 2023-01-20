@@ -1,0 +1,184 @@
+/**
+ * Created by Frederik on 5/12/2022.
+ */
+th {
+    text-align: center;
+    height:40px;
+    font-size: medium;
+    background: #f0f0f0;
+}
+td{
+    text-align:center;
+}
+
+.wholesalerline{
+    background: rgba(98, 164, 98, 0.37);
+}
+
+.manufacturerline{
+    background: rgba(234, 232, 8, 0.37);
+}
+
+lightning-formatted-rich-text{
+    margin-bottom: none;
+}
+
+.image{
+    mix-blend-mode: multiply;
+}
+
+.slds-rich-text-editor__output{
+    margin-bottom: none;
+}
+
+a{
+    color: #002F5E;
+}
+
+a:hover {
+    color: #f08293;
+    text-decoration: underline;
+}
+
+
+.nth-table {
+    border-collapse: collapse;
+}
+.nth-table tbody:nth-child(odd){
+    background: #f0f0f0;
+}
+
+.supplier-image {
+    vertical-align: center;
+}
+
+.subrow {
+    background: unset;
+}
+
+.nth-table th{
+    padding:12px;
+}
+.nth-table td{
+    color: #002F5E;
+    padding:12px;
+    width:90px;
+}
+
+.dim {
+    text-align: left !important;
+}
+
+supplierblock {
+    border-bottom: 2px solid #47474b;
+}
+
+tr.topborder {
+    border-top: 2px solid #47474b;
+}
+
+.gfg {
+    empty-cells: hide;
+}
+
+th.descriptiontable, td.descriptiontable {
+    text-align: center;
+    height:40px;
+    border: none;
+}
+
+.boldtext {
+    font-weight: bold;
+}
+.favoriteButton{
+    margin-top:19.8px ;
+}
+
+tr.descriptiontable {
+    text-align: center;
+    border: none;
+}
+
+table.descriptiontable {
+    border: none;
+}
+
+th.field {
+    width: 15%
+}
+
+/* th.label {
+    width: 25%
+} */
+th.subject {
+    width: 70%; /* Not necessary, since only 70% width remains */
+}
+
+.lightning-card{
+    display: block;
+}
+
+.infoTable{
+    width : 30%;
+}
+
+.productResult{
+    width : 70%;
+}
+
+
+@media only screen and (min-width: 64.01em) {
+    .producttable {
+        width: 90%;
+    }
+    .productbutton {
+        width: 10%;
+    }
+
+    .quantity-price-remove {
+        width: 60%;
+    }
+}
+
+/* Tablet sized screens or smaller (smaller than the SLDS mqLarge responsive threshold) */
+@media only screen and (max-width: 64em) {
+    .producttable {
+        width: 100%;
+    }
+
+}
+
+/* Small form factor: devices smaller than tablet (i.e. the SLDS mqSmall responsive threshold)*/
+@media only screen and (max-width: 47.9375em) {
+    .producttable {
+        width: 100%;
+    }
+
+}
+
+.slds-grid.slds-col.slds-size_3-of-4.slds-align_absolute-center{
+    min-width: 925px !important;
+    justify-content: right !important;
+}
+.slds-col.slds-size_1-of-4.slds-align_absolute-center.slds-grid.slds-wrap.slds-m-top_x-large{
+    padding-left: 25px !important;
+    justify-content: left !important;
+}
+@media only screen and (max-width: 1900px) {
+    .filterOrdering {
+        flex-direction: column;
+    }
+    .axisStyle{
+        margin-top:-12px ;
+    }
+
+}
+@media only screen and (min-width: 1901px) {
+    .axisStyle{
+        margin-left:20px ;
+    }
+
+}
+/* .slds-dueling-list__options{
+    max-height: 100px !important;
+} */

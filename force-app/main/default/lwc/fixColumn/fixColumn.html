@@ -1,0 +1,259 @@
+<template>
+    <lightning-tabset>
+        <lightning-tab label="Car"> 
+            <!-- Search Input -->
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_1-of-3"></div>
+                <div class="slds-col slds-size_1-of-3 ">
+                    <lightning-input
+                        name="enter-search"
+                        type="search"
+                        placeholder="Enter search term"
+                        value = {queryTerm}
+                        onchange={handleSearchItemChange}
+                        ></lightning-input>
+                        <!-- <p if:true={queryTerm}>
+                            Searched for {queryTerm}!
+                        </p> -->
+
+                    <!-- Radio Buttons to add filters like dimension -->
+                    <div class="slds-m-top_small slds-align_absolute-center">
+                        <lightning-button class="slds-m-left_small" variant="brand" label="Dimension" onclick={handleDimensionChange}></lightning-button>
+                        <lightning-button class="slds-m-right_small" label="Search" onclick={handleSearchButton}></lightning-button>
+                    </div>  
+                </div>
+                <div class="slds-col slds-size_1-of-3"></div>
+            </div>
+
+            <!-- Dimension filter section -->
+            <div class="slds-box slds-grid slds-wrap slds-m-top_small slds-size_2-of-4 slds-align_absolute-center" if:true={showDimensionFilter}>
+
+                    <lightning-combobox class="slds-col slds-size_1-of-5 slds-p-horizontal_x-small"
+                    name="progress"
+                    label="Width"
+                    value={widthValue}
+                    placeholder="Choose"
+                    options={widthOptions}
+                    onchange={handleWidthChange} ></lightning-combobox>
+                    <lightning-combobox class="slds-col slds-size_1-of-5 slds-p-horizontal_x-small"
+                        name="progress"
+                        label="Height" 
+                        value={heightValue}
+                        placeholder="Choose"
+                        options={heightOptions}
+                        disabled={disabledHeigth}
+                        onchange={handleHeightChange} ></lightning-combobox>
+                    <lightning-combobox class="slds-col slds-size_1-of-5 slds-p-horizontal_x-small"
+                        name="progress"
+                        label="Inches"
+                        value={inchesValue}
+                        placeholder="Choose"
+                        options={inchesOptions}
+                        disabled={disabledInches}
+                        onchange={handleInchesChange} ></lightning-combobox>
+                    <lightning-combobox class="slds-col slds-size_1-of-5 slds-p-horizontal_x-small"
+                        name="progress"
+                        label="Load capacity"
+                        value={capacityValue}
+                        placeholder="Choose"
+                        options={capacityOptions}
+                        disabled={disabledCapacity}
+                        onchange={handleCapacityChange} ></lightning-combobox>
+                    <lightning-combobox class="slds-col slds-size_1-of-5 slds-p-horizontal_x-small"
+                        name="progress"
+                        label="Speed index"
+                        value={speedValue}
+                        placeholder="Choose"
+                        options={speedOptions}
+                        disabled={disabledSpeed}
+                        onchange={handleSpeedChange} ></lightning-combobox>
+            </div>
+            <!-- <p>Selected value is: {heightValue}</p> -->
+            
+               
+            
+
+            <!-- End of Dimension Filter -->
+            
+                
+
+            <!-- Data table -->
+            <div class="slds-m-top_small">
+                <table class="gfg" >
+                    <template if:true={searchButton}>
+                        <tr>
+                        <th style="display:hidden; border:0px "></th>
+                        <th>Dimension</th>
+                        <th>Brand / Profil</th>
+                        <th>Label</th>
+                        <th>Delivery Date</th>
+                        <th>Stock</th>
+                        <th>List Price</th>
+                        <th>Sales Price</th>
+                        <th>Order</th>
+                        </tr>
+                    </template>
+                    <template for:each={data} for:item="product">
+                        <tr key={product}>
+                            <td>{product.Brand}</td>
+                            <td>{product.Dimension}</td>             
+                            <td>{product.BrandProfil}</td>                      
+                            <td><lightning-formatted-rich-text
+                                value={product.Label}
+                            ></lightning-formatted-rich-text></td>
+                            <td>{product.DeliveryDate}</td>
+                            <td>{product.Quantity}</td>
+                            <td>{product.ListPrice}</td>
+                            <td>{product.SalesPrice}</td>
+                            <td>
+                                <div class="slds-grid slds-align_center">
+                                    <template if:true={product.orderQuantity}>
+                                        <div class="slds-col slds-size_3-of-4 slds-p-horizontal_small" >
+                                            <input style="width:30%;" type="number" value="2"></input>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-4">
+                                            <lightning-input data-manufacturerid={product.index}  type="checkbox" data-type="manufacturer" onchange={orderCheckbox} checked={product.orderQuantity}> </lightning-input>
+                                        </div>
+                                    </template>
+                                    <template if:false={product.orderQuantity}>
+                                        <div class="slds-col slds-size_1-of-1 slds-align_center" >
+                                            <lightning-input variant="label-hidden" data-manufacturerid={product.index}  type="checkbox" data-type="manufacturer" onchange={orderCheckbox} checked={product.orderQuantity}> </lightning-input>
+                                        </div>
+                                    </template>
+                                    
+                                    
+                                </div>
+                            </td>
+                        </tr>
+                        <template for:each={product.manufacturerLines} for:item="manufacturerLine">
+                            <tr key={manufacturerLine}>
+                                <td style="display:hidden; border:0px "></td>
+                                <td style="display:hidden; border:0px "></td>       
+                                <td style="display:hidden; border:0px "></td>
+                                <td style="display:hidden; border:0px "></td>          
+                                <td style="background-color:#feffcc ;">{manufacturerLine.DeliveryDate}</td>
+                                <td style="background-color:#feffcc ;">{manufacturerLine.Quantity}</td>
+                                <td style="background-color:#feffcc ;">{manufacturerLine.ListPrice}</td>
+                                <td style="background-color:#feffcc ;">{manufacturerLine.SalesPrice}</td>
+                                <td style="background-color:#feffcc ;">
+                                    <div class="slds-grid slds-align_center">
+                                        <template if:true={manufacturerLine.orderQuantity}>
+                                            <div class="slds-col slds-size_3-of-4 slds-p-horizontal_small" >
+                                                <input style="width:30%;" type="number" value="2"></input>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-4">
+                                                <lightning-input onchange={orderCheckbox} data-id={manufacturerLine.index} data-manufacturerid={product.index} data-type="manufacturerLine" type="checkbox" checked={manufacturerLine.orderQuantity}> </lightning-input>
+                                            </div>
+                                        </template>
+                                        <template if:false={manufacturerLine.orderQuantity}>
+                                            <div class="slds-col slds-size_1-of-1 slds-align_center">
+                                                <lightning-input variant="label-hidden" onchange={orderCheckbox} data-id={manufacturerLine.index} data-manufacturerid={product.index} data-type="manufacturerLine" type="checkbox" checked={manufacturerLine.orderQuantity}> </lightning-input>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+                        <tr key={product}>
+                            <td style="display:hidden; border:0px "></td>
+                            <td style="display:hidden; border:0px "></td>       
+                            <td style="display:hidden; border:0px "></td>
+                            <td>{product.cheapest.Name}</td>          
+                            <td>{product.cheapest.DeliveryDate}</td>
+                            <td>{product.cheapest.Quantity}</td>
+                            <td>{product.cheapest.ListPrice}</td>
+                            <td>{product.cheapest.SalesPrice}</td>
+                            <td>
+                                <div class="slds-grid">
+                                    <template if:true={product.cheapest.orderQuantity}>
+                                        <div class="slds-col slds-size_3-of-4 slds-p-horizontal_small" >
+                                            <input style="width:30%;" type="number" value="2"></input>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-4">
+                                            <lightning-input onchange={orderCheckbox} data-manufacturerid={product.index} data-type="CheapestWholesaler" type="checkbox" checked={product.cheapest.orderQuantity}> </lightning-input>
+                                        </div>
+                                    </template>
+                                    <template if:false={product.cheapest.orderQuantity}>
+                                        <div class="slds-col slds-size_1-of-1 slds-align_center">
+                                            <lightning-input variant="label-hidden" onchange={orderCheckbox} data-manufacturerid={product.index} data-type="CheapestWholesaler" type="checkbox" checked={product.cheapest.orderQuantity}> </lightning-input>
+                                        </div>
+                                    </template>
+                                </div>
+                            </td>
+                            <td style="border: 0px;">
+                                <lightning-button variant="neutral" onclick={showAll} label={product.buttonLabel} data-id={product.index} style="padding:5%;">
+                                </lightning-button>
+                            </td>
+                        </tr>
+                        <template if:true={product.showWholesalers}>
+                        <template for:each={product.wholesalers} for:item="wholesaler">
+                            <tr key={wholesaler}>
+                                <td style="display:hidden; border:0px "></td>
+                                <td style="display:hidden; border:0px "></td>       
+                                <td style="display:hidden; border:0px "></td>
+                                <td>{wholesaler.Name}</td>          
+                                <td>{wholesaler.DeliveryDate}</td>
+                                <td>{wholesaler.Quantity}</td>
+                                <td>{wholesaler.ListPrice}</td>
+                                <td>{wholesaler.SalesPrice}</td>
+                                <td>
+                                    <div class="slds-grid">
+                                        <template if:true={wholesaler.orderQuantity}>
+                                            <div class="slds-col slds-size_3-of-4 slds-p-horizontal_small" >
+                                                <input style="width:30%;" type="number" value="2"></input>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-4">
+                                                <lightning-input onchange={orderCheckbox} data-id={wholesaler.index} data-manufacturerid={product.index} data-type="wholesaler" type="checkbox" checked={wholesaler.orderQuantity}> </lightning-input>
+                                            </div>
+                                        </template>
+                                        <template if:false={wholesaler.orderQuantity}>
+                                            <div class="slds-col slds-size_1-of-1 slds-align_center">
+                                                <lightning-input variant="label-hidden" onchange={orderCheckbox} data-id={wholesaler.index} data-manufacturerid={product.index} data-type="wholesaler" type="checkbox" checked={wholesaler.orderQuantity}> </lightning-input>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+                    </template>
+                    </template>    
+                  </table>
+
+            </div>
+
+            <!-- Add to card button -->
+            <div class="slds-grid slds-wrap slds-m-top_small">
+                <div class="slds-col slds-size_1-of-3"></div>
+                <div class="slds-col slds-size_1-of-3 "></div>
+                <div class="slds-col slds-size_1-of-3 slds-align_absolute-center">
+                    <template if:true={searchButton}>
+                    <lightning-button class="slds-m-left_small" label="Add Selected To Cart" title="Non-primary action" onclick={handleSelectedProducts}></lightning-button>
+                </template>
+                </div>
+            </div>
+            
+            <!-- <div class="slds-section">
+                <h3 class="slds-section__title">
+                <button aria-controls="expando-unique-id" aria-expanded="false" class="slds-button slds-section__title-action">
+                <svg class="slds-section__title-action-icon slds-button__icon slds-button__icon_left" aria-hidden="true">
+                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#switch"></use>
+                </svg>
+                <span class="slds-truncate" title="Section Title">Section Title</span>
+                </button>
+                </h3>
+                <div aria-hidden="true" class="slds-section__content" id="expando-unique-id">
+                <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Nullam quis risus eget urna mollis ornare vel eu leo. Nulla vitae elit libero, a pharetra augue.</p>
+                </div>
+            </div> -->
+
+
+        </lightning-tab>
+        <lightning-tab label="Moto"> Content for Moto </lightning-tab>
+        <lightning-tab label="Truck"> Content for Truck </lightning-tab>
+        <!-- <template if:true={showTabTwo}>
+            <lightning-tab label="Item Two"> Content for tab 2 </lightning-tab>
+        </template> -->
+
+    </lightning-tabset>
+</template>

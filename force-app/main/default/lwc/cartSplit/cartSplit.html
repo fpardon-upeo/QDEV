@@ -1,0 +1,161 @@
+<!--
+ - Created by Frederik on 29/11/2022.
+ -->
+
+<template>
+    <div if:true={showLoader} class="main-spinner">
+        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+    </div>
+    <div class="main-container">
+        <div class="split-cart">
+            <!-- Cart Split -->
+            <header class="slds-p-bottom_large">
+                <h1 class="slds-text-heading_large">{cartHeader}</h1>
+            </header>
+            <ul>
+                <template for:each={cart.orders} for:item="order" for:index="index">
+                    <div key={order.supplierCode} class="supplier">
+                        <div class="supplier-header">
+                            <div>
+                                <li key={order.supplierCode} class="slds-p-vertical_small">
+                                    <h2 class="slds-text-heading_medium"><lightning-formatted-rich-text image value={order.supplierLogo} class="image"></lightning-formatted-rich-text></h2>
+                                </li>
+                            </div>
+                            <div>
+                                <div class="delivery-address">
+                                    <p class="p-title">{bToBCart_DeliveryAddress}</p>
+                                    <template if:true={order.supplierShowAllAdresses}>
+                                        <div class="combobox-address">
+                                            <lightning-combobox
+                                                    data-supplier={order.supplierCode}
+                                                    data-address={order.deliveryAddress}
+                                                    name="Delivery Address"
+                                                    value={order.deliveryAddress}
+                                                    placeholder=""
+                                                    options={contactPointAddressesOptions}
+                                                    onchange={handleContactPointAddressesChange}>
+                                            </lightning-combobox>
+                                        </div>
+                                    </template>
+                                    <template if:false={order.supplierShowAllAdresses}>
+                                        <p class="p-address">{contactPointAddressesDefault}</p>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <table>
+                                <tr class="title">
+                                    <th>{bToBCart_Brand} </th>
+                                    <th>{bToBCart_Description} </th>
+                                    <th>{bToBCart_Comments} </th>
+                                    <th>{bToBCart_Price} </th>
+                                    <th>{bToBCart_Quantity} </th>
+                                    <th>{bToBCart_Total} </th>
+                                </tr>
+                                <template for for:each={order.articles} for:item="article">
+                                    <tr key={article.articleId} class="slds-p-bottom_large tr-data" data-index={index} >
+                                        <td data-td-type={order.supplierType} data-td-id={order.supplierCode}>
+                                            <lightning-formatted-rich-text image value={article.profileBrand} class="image"></lightning-formatted-rich-text>
+                                        </td>
+                                        <td data-td-type={order.supplierType} data-td-id={order.supplierCode}>{article.articleDescription}</td>
+                                        <td class="td-input" data-td-type={order.supplierType} data-td-id={order.supplierCode}><lightning-textarea name="Delivery Address" value={article.comment} data-cart-item-id={article.cartItemId} onblur={handleCommentChange}></lightning-textarea></td>
+                                        <td data-td-type={order.supplierType} data-td-id={order.supplierCode}><lightning-formatted-number value={article.price} format-style="currency"></lightning-formatted-number></td>
+                                        <td data-td-type={order.supplierType} data-td-id={order.supplierCode}>
+                                            <input style="width: 50px ;"
+                                                   max={article.maxQuantity}
+                                                   value={article.quantity}
+                                                   min="2"
+                                                   step="2"
+                                                   type="number"
+                                                   data-cart-item-id={article.cartItemId}
+                                                   onchange={handleQuantityChange}
+                                            />
+                                        </td>
+                                        <td data-td-type={order.supplierType} data-td-id={order.supplierCode}><lightning-formatted-number value={article.totalLinePrice} format-style="currency"></lightning-formatted-number></td>
+                                        <td class="last-td"><div style="cursor: pointer;"><lightning-button-icon icon-name="utility:delete" alternative-text="Delete" class="test slds-m-left_xx-small" title="Delete" data-cart-item-id={article.cartItemId} onclick={deleteCartItem}></lightning-button-icon></div></td>
+                                        <td if:true={article.hasErrors} class="last-td"><div><lightning-icon icon-name="utility:warning" alternative-text="Warning" class="test" title="Warning" variant="warning"></lightning-icon></div></td>
+                                    </tr>
+                                    <tr key={article.articleId} class="slds-p-bottom_large tr-data" data-index={index}>
+                                        <td data-td-type={order.supplierType} data-td-id={order.supplierCode}><b>{bToBCart_Recyclage}</b></td>
+                                        <td data-td-type={order.supplierType} data-td-id={order.supplierCode}></td>
+                                        <td data-td-type={order.supplierType} data-td-id={order.supplierCode}></td>
+                                        <td data-td-type={order.supplierType} data-td-id={order.supplierCode}>{article.recytyreCategory} <span if:true={article.showRecytyre}>- <lightning-formatted-number value={article.recytyre} format-style="currency"></lightning-formatted-number></span></td>
+                                        <td data-td-type={order.supplierType} data-td-id={order.supplierCode}>{article.quantity}</td>
+                                        <td data-td-type={order.supplierType} data-td-id={order.supplierCode}><lightning-formatted-number value={article.totalRecytyre} format-style="currency"></lightning-formatted-number></td>
+                                    </tr>
+                                </template>
+                                <tr key={article.articleId} class="slds-p-bottom_large tr-trsp">
+                                    <td data-td-type={order.supplierType} data-td-id={order.supplierCode}><b>{bToBCart_Transport}</b></td>
+                                    <td data-td-type={order.supplierType} data-td-id={order.supplierCode}></td>
+                                    <td data-td-type={order.supplierType} data-td-id={order.supplierCode}></td>
+                                    <td data-td-type={order.supplierType} data-td-id={order.supplierCode}></td>
+                                    <td data-td-type={order.supplierType} data-td-id={order.supplierCode}></td>
+                                    <td data-td-type={order.supplierType} data-td-id={order.supplierCode}><lightning-formatted-number value={order.totalTransportCost} format-style="currency"></lightning-formatted-number></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="slds-grid">
+                            <div class="subtotal-table slds-m-top_medium">
+                                <table class="table-border">
+                                    <tr class="subtotal-table-header">
+                                        <th class="table-border"> {bToBCart_TotalProducts} </th>
+                                        <th class="table-border"> {bToBCart_TotalDeliveryCost} </th>
+                                        <th class="table-border"> {bToBCart_TotalLabelCost} </th>
+                                        <th class="table-border"> {bToBCart_TotalExVAT} </th>
+                                        <th class="table-border"> {bToBCart_Vat} </th>
+                                        <th class="table-border"> {bToBCart_TotalIncVat} </th>
+                                    </tr>
+                                    <tr key={order.supplierCode} class="slds-p-bottom_large table-border">
+                                        <td class="table-border"><lightning-formatted-number value={order.totalProductCost} format-style="currency"></lightning-formatted-number></td>
+                                        <td class="table-border"><lightning-formatted-number value={order.totalTransportCost} format-style="currency"></lightning-formatted-number></td>
+                                        <td class="table-border"><lightning-formatted-number value={order.totalLabelCost} format-style="currency"></lightning-formatted-number></td>
+                                        <td class="table-border"><lightning-formatted-number value={order.totalCostExVat} format-style="currency"></lightning-formatted-number></td>
+                                        <td class="table-border"><lightning-formatted-number value={order.taxes} format-style="currency"></lightning-formatted-number></td>
+                                        <td class="table-border"><lightning-formatted-number value={order.totalCostIncVat} format-style="currency"></lightning-formatted-number></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="subtotal-table slds-m-top_medium" style="display: flex;align-items: center;">
+                                <div class="button-container slds-m-top_medium">
+                                    <lightning-button variant="brand" label={bToBCart_CheckOrder} data-item-id={order.supplierCode} data-total-cost-inc-vat={order.totalCostIncVat} data-supplier-type={order.supplierType} onclick={checkSingleSupplierOrder} class="slds-float_right slds-m-left_x-small"></lightning-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </ul>
+        </div>
+        <div>
+            <!-- Cart -->
+            <header class="slds-p-bottom_large">
+                <h1 class="slds-text-heading_large">{bToBCart_TotalCart}</h1>
+            </header>
+            <div class="global-cart">
+                <div class="flex">
+                    <div>
+                        <p>{bToBCart_TotalProducts}</p>
+                        <p>{bToBCart_TotalDeliveryCost}</p>
+                        <p>{bToBCart_TotalLabelCost}</p>
+                        <p>{bToBCart_TotalExVAT}</p>
+                        <p>&nbsp;</p>
+                        <p>{bToBCart_Vat}</p>
+                        <p class="last-p">{bToBCart_TotalIncVat}</p>
+                    </div>
+                    <div>
+                        <p><lightning-formatted-number value={cart.globalProductCost} format-style="currency"></lightning-formatted-number></p>
+                        <p><lightning-formatted-number value={cart.globalTransportCost} format-style="currency"></lightning-formatted-number></p>
+                        <p><lightning-formatted-number value={cart.globalLabelCost} format-style="currency"></lightning-formatted-number></p>
+                        <p><lightning-formatted-number value={cart.globalCostExVat} format-style="currency"></lightning-formatted-number></p>
+                        <p>&nbsp;</p>
+                        <p><lightning-formatted-number value={cart.globalTaxes} format-style="currency"></lightning-formatted-number></p>
+                        <p class="last-p"><lightning-formatted-number value={cart.globalCostIncVat} format-style="currency"></lightning-formatted-number></p>
+                    </div>
+                </div>
+                <div class="button-container">
+                    <lightning-button variant="brand" label={bToBCart_Checkout} onclick={globalCheckout}></lightning-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

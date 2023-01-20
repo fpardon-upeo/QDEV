@@ -1,0 +1,53 @@
+/**
+ * Created by Frederik on 14/12/2022.
+ */
+
+ .tableFixHead {
+    overflow: auto;
+    height: 500px;
+}
+
+.tableFixHead table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.tableFixHead th {
+    position: sticky;
+    top: 0;
+    z-index: 4;
+
+    background: white;
+}
+
+.head{
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.export{
+    display: flex;
+    justify-content: end;
+}
+
+.export div{
+    padding-left: 10px;
+}
+
+.filter{
+    display: flex;
+    align-items: baseline;
+}
+
+.filter lightning-input{
+    width: 170px;
+    justify-content: start;
+}
+
+.filter lightning-input,
+.filter p,
+.filter lightning-button{
+    margin-right: 10px;
+}

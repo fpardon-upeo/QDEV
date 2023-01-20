@@ -1,0 +1,211 @@
+<!--
+ - Created by Frederik on 5/12/2022.
+ -->
+
+<!-- Product Search Table -->
+<template>
+
+    <lightning-tabset>
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_1-of-3"></div>
+            <div class="slds-col slds-size_1-of-3 ">
+                <div onkeyup={handleKeyUp}>
+                    <lightning-input
+                            name="enter-search"
+                            type="search"
+                            placeholder="Enter search term"
+                            onchange={handleSearchTermChange}
+                    ></lightning-input>
+                    <p if:true={queryTerm}>
+                        Searched for {queryTerm}!
+                    </p>
+                </div>
+                <!-- Radio Buttons to add filters like dimension -->
+                <div class="slds-m-top_small slds-align_absolute-center">
+                    <lightning-button class="slds-m-left_small" variant="brand" label="Dimension" onclick={handleDimensionChange}></lightning-button>
+                    <lightning-button class="slds-m-right_small" label="Search" onclick={search} ></lightning-button>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-3"></div>
+        </div>
+
+        <!-- Dimension filter section -->
+        <div class="slds-box slds-grid slds-wrap slds-m-top_small slds-size_2-of-4 slds-align_absolute-center" if:true={showDimensionFilter}>
+
+            <lightning-combobox class="slds-col slds-size_1-of-5 slds-p-horizontal_x-small"
+                                name="progress"
+                                label="Width"
+                                value={widthValue}
+                                placeholder="Choose"
+                                options={widthOptions}
+                                onchange={handleWidthChange} ></lightning-combobox>
+            <lightning-combobox class="slds-col slds-size_1-of-5 slds-p-horizontal_x-small"
+                                name="progress"
+                                label="Height"
+                                value={heightValue}
+                                placeholder="Choose"
+                                options={heightOptions}
+                                disabled={disabledHeigth}
+                                onchange={handleHeightChange} ></lightning-combobox>
+            <lightning-combobox class="slds-col slds-size_1-of-5 slds-p-horizontal_x-small"
+                                name="progress"
+                                label="Inches"
+                                value={inchesValue}
+                                placeholder="Choose"
+                                options={inchesOptions}
+                                disabled={disabledInches}
+                                onchange={handleInchesChange} ></lightning-combobox>
+            <lightning-combobox class="slds-col slds-size_1-of-5 slds-p-horizontal_x-small"
+                                name="progress"
+                                label="Load capacity"
+                                value={capacityValue}
+                                placeholder="Choose"
+                                options={capacityOptions}
+                                disabled={disabledCapacity}
+                                onchange={handleCapacityChange} ></lightning-combobox>
+            <lightning-combobox class="slds-col slds-size_1-of-5 slds-p-horizontal_x-small"
+                                name="progress"
+                                label="Speed index"
+                                value={speedValue}
+                                placeholder="Choose"
+                                options={speedOptions}
+                                disabled={disabledSpeed}
+                                onchange={handleSpeedChange} ></lightning-combobox>
+        </div>
+
+        <!-- Product table -->
+        <div class="slds-grid">
+            <table class="nth-table">
+                <thead>
+                <tr>
+                    <th>Season</th>
+                    <th>Brand</th>
+                    <th>Description</th>
+                    <th>Supplier</th>
+                    <th>List Price</th>
+                    <th>Unit Price</th>
+                    <th>Delivery Date</th>
+                    <th>Stock</th>
+                    <th>Quantity</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <template for:each={searchResults} for:item="result" for:index="index">
+                    <tbody key={result.id}>
+                    <tr class="productrow" key={result.id}>
+                        <td>
+                            <lightning-formatted-rich-text value={result.seasonImg}></lightning-formatted-rich-text>
+                        </td>
+                        <td>
+                            <lightning-formatted-rich-text value={result.brandImg}></lightning-formatted-rich-text>
+                        </td>
+                        <td>
+                            <span class={assignClass} data-productid={result.id} onmouseenter={showData} onmouseout={hideData}>
+                                {result.dimension}
+                            </span>
+                        </td>
+                        <td>
+                            <lightning-formatted-rich-text class="slds-rich-text-editor__output" value={result.supplier}></lightning-formatted-rich-text>
+                        </td>
+                        <td>
+                            {result.listPrice}
+                        </td>
+                        <td>
+                            {result.salesPrice}
+                        </td>
+                        <td>
+                            {result.deliveryDate}
+                        </td>
+                        <td>
+                            {result.quantity}
+                        </td>
+                        <td>
+                            {result.orderQuantity}
+                        </td>
+                        <td></td>
+                        <td >
+                            <lightning-icon class={assignClass} data-productid={result.id} onclick={showData} onmouseleave={hideData} icon-name="utility:info" alternative-text="Info" title="Info"></lightning-icon>
+                        </td>
+
+                    </tr>
+                        <template for:each={result.wholesalers} for:item="whs">
+                            <tr class="subrow" if:true={whs.showLine} key={whs.id}>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    {whs.salesPrice}
+                                </td>
+                                <td>
+                                    {whs.deliveryDate}
+                                </td>
+                                <td>
+                                    {whs.quantity}
+                                </td>
+                                <td>
+                                    {whs.orderQuantity}
+                                </td>
+                                <td>
+                                    <lightning-button-stateful
+                                            if:true={whs.showButton}
+                                            variant="brand"
+                                            onclick={showAllWhsLines}
+                                            label="Toggle Lines"
+                                            data-index={result.index}
+                                            style="padding:5%;"
+                                            label-when-off="More"
+                                            label-when-on="Less"
+                                            selected={whs.buttonState}
+                                    ></lightning-button-stateful>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </template>
+                    <template for:each={result.manufacturers} for:item="mfg">
+                        <tr class="subrow" if:true={mfg.showLine} key={mfg.id}>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><lightning-formatted-rich-text
+                                    value={mfg.supplier}>
+                            </lightning-formatted-rich-text>
+                            </td>
+                            <td></td>
+                            <td>
+                                {mfg.salesPrice}
+                            </td>
+                            <td>
+                                {mfg.deliveryDate}
+                            </td>
+                            <td>
+                                {mfg.quantity}
+                            </td>
+                            <td>
+                                {mfg.orderQuantity}
+                            </td>
+                            <td>
+                                <lightning-button-stateful
+                                        if:true={mfg.showButton}
+                                        variant="brand"
+                                        onclick={showAllMfgLines}
+                                        label="Toggle Lines"
+                                        data-index={result.index}
+                                        style="padding:5%;"
+                                        label-when-off="More"
+                                        label-when-on="Less"
+                                        selected={mfg.buttonState}
+                                ></lightning-button-stateful>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </template>
+                    </tbody>
+                </template>
+            </table>
+        </div>
+        <c-product-detail-popover key={result.id} topmargin={top} leftmargin={left} myproduct={product}></c-product-detail-popover>
+    </lightning-tabset>
+</template>

@@ -1,0 +1,52 @@
+<!--
+ - Created by Frederik on 14/12/2022.
+ -->
+
+<!-- Order Data Table -->
+<template>
+
+    <lightning-card icon-name="standard:orders" title="Order Products">
+
+        <div class="slds-theme–default">
+            <div class="slds-size_12-of-12">
+                <div class="tableFixHead">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped" role="grid">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="slds-is-resizable slds-is-sortable" scope="col">Order Product</th>
+                            <th class="slds-is-resizable slds-is-sortable" scope="col">EAN</th>
+                            <th class="slds-is-resizable slds-is-sortable" scope="col">Quantity</th>
+                            <th class="slds-is-resizable slds-is-sortable" scope="col">Unit Price</th>
+                            <th class="slds-is-resizable slds-is-sortable" scope="col">Reorder</th>
+                            <th>
+                                <lightning-button-icon icon-name="utility:close" onclick={handleClose} variant="brand"></lightning-button-icon>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={orderLines} for:item="order">
+                            <tr key={order.id}>
+                                <td role="gridcell">
+                                    <a href={order.productNameDetail} target="_blank" onclick={handleClick}>{order.productName}</a>
+                                </td>
+                                <td role="gridcell">{order.productEAN}</td>
+                                <td role="gridcell">{order.quantity}</td>
+                                <td role="gridcell">
+                                    <lightning-formatted-number format-style="currency" currency-code="EUR" value={order.unitPrice}>
+                                    </lightning-formatted-number>
+                                </td>
+                                <td>
+                                    <lightning-button-icon icon-name="utility:cart" variant="border-filled" alternative-text="Reorder" onclick={handleReorder} value={order.id}></lightning-button-icon>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+
+    </lightning-card>
+
+</template>

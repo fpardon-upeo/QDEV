@@ -1,0 +1,75 @@
+<!--
+ - Created by Frederik on 6/12/2022.
+ -->
+
+<!-- Product Detail Popover -->
+<template>
+    <div>
+        <template if:true={showpop} >
+            <div class="slds-popover slds-nubbin_left potato slds-box slds-grid slds-size_12-of-12" style={boxClass}>
+                <lightning-record-edit-form object-api-name="Product2" record-id={product} density="comfy">
+                    <lightning-messages>
+                    </lightning-messages>
+                    <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+                        <lightning-accordion-section name="ProductInformation" label={B2BPopover_Product_Info}>
+                            <div class="flex">
+                                <template for:each={productInformationSectionfields} for:item="productInformationSectionfield">
+                                    <div key={productInformationSectionfield}>
+                                        <lightning-output-field field-name={productInformationSectionfield}></lightning-output-field>
+                                    </div>
+                                </template>
+                            </div>
+                        </lightning-accordion-section>
+                        <lightning-accordion-section name="Dimensions" label={B2BPopover_Dimensions}>
+                            <div class="flex">
+                                <template for:each={dimensionsSectionfields} for:item="dimensionsectionfield">
+                                    <div key={dimensionsectionfield}>
+                                        <lightning-output-field field-name={dimensionsectionfield}></lightning-output-field>
+                                    </div>
+                                </template>
+                            </div>
+                        </lightning-accordion-section>
+                        <lightning-accordion-section name="Labels" label={B2BPopover_Labels}>
+                            <div class="flex">
+                                <template for:each={labelsSectionfields} for:item="labelsectionfield">
+                                    <div key={labelsectionfield}>
+                                        <lightning-output-field field-name={labelsectionfield}></lightning-output-field>
+                                    </div>
+                                </template>
+                            </div>
+                        </lightning-accordion-section>
+                        <lightning-accordion-section name="ProductSpecifications" label={B2BPopover_Product_Specifications}>
+                            <div class="flex">
+                                <template for:each={productSpecificationssectionfields} for:item="productSpecificationssectionfield">
+                                    <div key={productSpecificationssectionfield}>
+                                        <lightning-output-field field-name={productSpecificationssectionfield}></lightning-output-field>
+                                    </div>
+                                </template>
+                            </div>
+                        </lightning-accordion-section>
+                        <lightning-accordion-section name="Ecotax" label={B2BPopover_Ecotax}>
+                            <div class="flex">
+                                <template for:each={ecotaxSectionfields} for:item="ecotaxSectionfield">
+                                    <div key={ecotaxSectionfield}>
+                                        <lightning-output-field field-name={ecotaxSectionfield}></lightning-output-field>
+                                    </div>
+                                </template>
+                            </div>
+                        </lightning-accordion-section>
+                        <lightning-accordion-section name="productImages" label={B2BPopover_Product_Images}>
+                            <div class="flex">
+                                <template for:each={productImagesSectionfields} for:item="productImagesSectionfield">
+                                    <div key={productImagesSectionfield}>
+                                        <lightning-output-field field-name={productImagesSectionfield}></lightning-output-field>
+                                    </div>
+                                </template>
+                            </div>
+                        </lightning-accordion-section>
+                    </lightning-accordion>
+                </lightning-record-edit-form>
+
+                <lightning-button-icon icon-name="utility:close" variant="brand" class="slds-float_right" onclick={closePopover}></lightning-button-icon>
+            </div>
+        </template>
+    </div>
+</template>

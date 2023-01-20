@@ -1,0 +1,73 @@
+<!--
+ - Created by Frederik on 14/12/2022.
+ -->
+
+<!-- Order Data Table -->
+<template>
+    <div class="head">
+        <div class="filter">
+            <p>Filter by date</p>
+            <lightning-input type="date" name="StartDate" label="Start Date" onchange={handleStartDateChange}></lightning-input>
+            <lightning-input type="date" name="EndDate" label="End Date" onchange={handleEndDateChange}></lightning-input>
+            <lightning-button variant="brand" label="Apply" title="Apply" onclick={filterByDate}></lightning-button>
+            <lightning-button label="Reset" title="Reset" onclick={rsetFilterByDate}></lightning-button>
+        </div>
+        <div class="export">
+            <div><lightning-button variant="brand" label="Export Excel" title="Export Excel" onclick={exportOrdersExcel}></lightning-button></div>
+            <div><lightning-button variant="brand" label="Export CSV" title="Export CSV" onclick={exportOrdersCsv}></lightning-button></div>
+        </div>
+    </div>
+
+    <lightning-card if:true={showOrderTable} icon-name="standard:orders" title="My Orders">
+
+        <div class="slds-theme–default">
+            <div>
+                <div class="tableFixHead">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped" role="grid">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="slds-is-resizable slds-is-sortable" scope="col"></th>
+                            <th class="slds-is-resizable slds-is-sortable" scope="col">Order Number</th>
+                            <th class="slds-is-resizable slds-is-sortable" scope="col">Account Name</th>
+                            <th class="slds-is-resizable slds-is-sortable" scope="col">Supplier Name</th>
+                            <th class="slds-is-resizable slds-is-sortable" scope="col">Order Total</th>
+                            <th class="slds-is-resizable slds-is-sortable" scope="col">Order Date</th>
+                            <th class="slds-is-resizable slds-is-sortable" scope="col">Reorder</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={orderLines} for:item="order">
+                            <tr key={order.id}>
+                                <td role="gridcell">
+                                    <input type="checkbox" class="ordercheckbox" data-ordernumber={order.orderNumber}/>
+                                </td>
+                                <td role="gridcell">
+                                    <a href={order.orderDetail} target="_blank" onclick={handleClick}>{order.orderNumber}</a>
+                                </td>
+                                <td role="gridcell">{order.accountName}</td>
+                                <td role="gridcell">{order.supplierName}</td>
+                                <td role="gridcell">
+                                    <lightning-formatted-number format-style="currency" currency-code="EUR" value={order.totalAmount}>
+                                    </lightning-formatted-number>
+                                </td>
+                                <td role="gridcell">{order.orderDate}</td>
+                                <td>
+                                    <lightning-button-icon icon-name="utility:cart" variant="border-filled" alternative-text="Reorder" onclick={handleReorder} value={order.id}></lightning-button-icon>
+                                    <lightning-button-icon icon-name="utility:automate" class="slds-m-left_small" variant="border-filled" alternative-text="Reorder Select Items" onclick={handleItemReorder} value={order.id}></lightning-button-icon>
+                                    <lightning-button-icon if:true={order.hasInvoice} icon-name="utility:contract_payment" class="slds-m-left_small" variant="border-filled" alternative-text="Invoice" value={order.orderInvoice} data-url={order.orderInvoice} onclick={openInvoice}>
+                                        <a href={order.orderInvoice}></a>
+                                    </lightning-button-icon>
+                                    <lightning-button-icon if:true={order.hasOrder} icon-name="utility:contract_doc" class="slds-m-left_small" variant="border-filled" alternative-text="Invoice" value={order.orderOrderUrl} data-url={order.orderOrderUrl} onclick={openInvoice}>
+                                        <a href={order.orderInvoice}></a>
+                                    </lightning-button-icon>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+    <c-order-product-data-table if:true={showOrderLinesTable} onclose={handleBackToOrders} record-id={recordId}></c-order-product-data-table>
+</template>

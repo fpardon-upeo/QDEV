@@ -1,0 +1,553 @@
+<!-- /* created by :
+    Abdelhafid Khribech
+    on 02/12/2022
+*/ -->
+<template>
+
+    <!-- Search Input -->
+    <div class="slds-grid slds-wrap">
+
+        <div class="slds-col slds-size_1-of-3">
+
+
+        </div>
+        <div class="slds-col slds-size_1-of-3 ">
+            <div>
+                <lightning-input
+                        name="enter-search"
+                        type="search"
+                        placeholder={searchTermPlaceholder}
+                        onchange={handleSearchTermChange}
+                ></lightning-input>
+            </div>
+            <!-- Radio Buttons to add filters like dimension -->
+            <div class="slds-m-top_small slds-align_absolute-center">
+                <lightning-button if:true={showCarFilter} class="slds-m-left_small" variant="brand" label={CategoryButton} onclick={handleCategoryChange}></lightning-button>
+                <lightning-button if:true={showMotoFilter} class="slds-m-left_small" variant="brand" label={typeLabel} onclick={handleTypeChange}></lightning-button>
+                <lightning-button class="slds-m-left_small" variant="brand" label={tyreDetailsButton} onclick={handleDimensionChange}></lightning-button>
+                <lightning-button if:false={showTruckFilter} class="slds-m-left_small" variant="brand" label={specificationButton} onclick={handleSpecificationChange}></lightning-button>
+                <lightning-button if:false={showMotoFilter} class="slds-m-left_small" variant="brand" label={LabelButton} onclick={handleLabelChange}></lightning-button>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-3 slds-m-top_medium" style="margin-top:18px ;">
+            <lightning-button class="slds-m-right_small slds-p-left_x-large" label={searchButton} onclick={handleSearchClick} ></lightning-button>
+            <lightning-button label={clearButton} onclick={clearSearch} ></lightning-button>
+        </div>
+    </div>
+
+    <!-- Dimension filter section -->
+    <div class="slds-grid slds-wrap">
+        <div class="slds-col slds-size_1-of-3">
+        </div>
+        <div class="slds-col slds-size_1-of-3">
+            <div class="slds-grid slds-wrap slds-m-top_medium slds-size_3-of-4 slds-align_absolute-center" if:true={showCategoryFilter}>
+                <lightning-combobox class="slds-col slds-p-horizontal_x-small"
+                                    name="progress"
+                                    label={categoryLabel}
+                                    value={categoryValue}
+                                    placeholder={choosePlaceholder}
+                                    options={categoryOptions}
+                                    onchange={handleCategoryValueChange} ></lightning-combobox>
+            </div>
+            <div class="slds-grid slds-wrap slds-m-top_medium slds-size_3-of-4 slds-align_absolute-center" if:true={showTypeFilter}>
+                <lightning-combobox class="slds-col slds-p-horizontal_x-small"
+                                    name="progress"
+                                    label={typeLabel}
+                                    value={typeValue}
+                                    placeholder={choosePlaceholder}
+                                    options={typeOptions}
+                                    onchange={handleTypeValueChange} ></lightning-combobox>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-grid slds-wrap" style="max-width: 1600px; margin:0 auto;flex-wrap:wrap">
+        <div class="slds-grid slds-col slds-size_4-of-4 slds-m-top_large" if:true={showDimensionFilter}>
+            <div if:true={showDropdown} class="slds-col slds-size_1-of-4 slds-m-top_large">
+                <div class="slds-grid slds-float_right">
+                    <div class="slds-grid">
+                        <c-multi-select-dropdown style="width: 200px;" options={options} user-id={userId} record-type={recordType} onselected={handleBrandSelected}></c-multi-select-dropdown>
+                        <lightning-button-icon icon-name="utility:favorite" alternative-text="Save as favorite" tooltip={favoriteButtonLabel} onclick={saveFavorite} variant="brand" class="slds-col slds-size_1-of-4 slds-p-left_medium slds-m-top_none favoriteButton"></lightning-button-icon>
+                    </div>
+                </div>
+            </div>
+            <div></div>
+            <div class="slds-grid_vertical slds-align-top slds-size_3-of-10">
+                <div class="slds-grid slds-size_2-of-10 filterOrdering slds-m-left_small" if:true={showTruckFilter}>
+                    <div class="slds-col slds-wrap">
+                        <lightning-combobox class="slds-col slds-float_right" style="max-width:96px;"
+                                            name="progress"
+                                            label={useLabel}
+                                            value={useValue}
+                                            placeholder={choosePlaceholder}
+                                            options={useOptions}
+                                            onchange={handleUseChange} >
+                        </lightning-combobox>
+                        <div class="slds-col slds-wrap slds-m-left_small axisStyle">
+                            <lightning-combobox class="slds-col slds-float_right" style="max-width:96px;"
+                                                name="progress"
+                                                label={axisLabel}
+                                                value={axisValue}
+                                                placeholder={choosePlaceholder}
+                                                options={axisOptions}
+                                                onchange={handleAxisChange} >
+                            </lightning-combobox>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_2-of-4 slds-m-left_large slds-align-top slds-m-top_large">
+                <div class="slds-box slds-grid slds-wrap slds-align_absolute-center">
+                    <lightning-combobox class="slds-col slds-size_1-of-5 slds-p-horizontal_xx-small"
+                                        name="progress"
+                                        label={widthLabel}
+                                        value={widthValue}
+                                        placeholder={choosePlaceholder}
+                                        options={widthOptions}
+                                        onchange={handleWidthChange} ></lightning-combobox>
+                    <lightning-combobox class="slds-col slds-size_1-of-5 slds-p-horizontal_xx-small"
+                                        name="progress"
+                                        label={heightLabel}
+                                        value={heightValue}
+                                        placeholder={choosePlaceholder}
+                                        options={heightOptions}
+                                        disabled={disabledHeigth}
+                                        onchange={handleHeightChange} ></lightning-combobox>
+                    <lightning-combobox class="slds-col slds-size_1-of-5 slds-p-horizontal_xx-small"
+                                        name="progress"
+                                        label={inchesLabel}
+                                        value={inchesValue}
+                                        placeholder={choosePlaceholder}
+                                        options={inchesOptions}
+                                        disabled={disabledInches}
+                                        onchange={handleInchesChange} ></lightning-combobox>
+                    <lightning-combobox class="slds-col slds-size_1-of-5 slds-p-horizontal_xx-small"
+                                        name="progress"
+                                        label={loadCapacityLabel}
+                                        value={capacityValue}
+                                        placeholder={choosePlaceholder}
+                                        options={capacityOptions}
+                                        disabled={disabledCapacity}
+                                        onchange={handleCapacityChange} ></lightning-combobox>
+                    <lightning-combobox class="slds-col slds-size_1-of-5 slds-p-horizontal_xx-small"
+                                        name="progress"
+                                        label={speedIndexLabel}
+                                        value={speedValue}
+                                        placeholder={choosePlaceholder}
+                                        options={speedOptions}
+                                        disabled={disabledSpeed}
+                                        onchange={handleSpeedChange} ></lightning-combobox>
+                </div>
+            </div>
+            <div class="slds-grid_vertical slds-size_1-of-9 slds-align-top slds-m-left_large filterOrdering" if:true={showCarFilter}>
+                <div class="slds-col slds-grid slds-wrap slds-m-left_small">
+                    <lightning-combobox class="slds-col slds-float_right" style="max-width:96px;"
+                                        name="progress"
+                                        label={seasonPicklistLabel}
+                                        value={seasonValue}
+                                        variant="label-stacked"
+                                        placeholder={choosePlaceholder}
+                                        options={seasonOptions}
+                                        onchange={handleSeasonChangeCar} >
+                    </lightning-combobox>
+                </div>
+            </div>
+            <div class="slds-grid slds-size_1-of-9 slds-align-top slds-m-left_large filterOrdering" if:true={showMotoFilter}>
+                <div class="slds-col slds-grid slds-wrap slds-m-top_x-small">
+                    <lightning-combobox class="slds-col slds-m-top_small slds-float_right" style="max-width:96px;"
+                                        name="progress"
+                                        label={seasonPicklistLabel}
+                                        value={motoSeasonValue}
+                                        placeholder={choosePlaceholder}
+                                        options={motoSeasonsOptions}
+                                        onchange={handleSeasonChangeMoto} >
+                    </lightning-combobox>
+                </div>
+                <div class="slds-col slds-grid slds-wrap slds-m-top_x-small axisStyle">
+                    <lightning-combobox class="slds-col slds-m-top_small slds-float_right" style="max-width:96px;"
+                                        name="progress"
+                                        label={positionLabel}
+                                        value={positionValue}
+                                        placeholder={choosePlaceholder}
+                                        options={positionOptions}
+                                        onchange={handlePositionChange} >
+                    </lightning-combobox>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-col slds-size_1-of-4 slds-align_absolute-center slds-grid slds-m-top_x-large " style="display:grid" if:true={showRightFilters}>
+            <div class="slds-grid">
+            <div class="slds-box slds-grid slds-m-top_small" if:true={showLabelFilter} style="min-width:312px;">
+                <lightning-combobox class="slds-col slds-size_1-of-3 slds-p-horizontal_xx-small"
+                                    name="progress"
+                                    label={fuelLabel}
+                                    value={fuelValue}
+                                    placeholder={choosePlaceholder}
+                                    options={fuelOptions}
+                                    onchange={handleFuelChange} ></lightning-combobox>
+                <lightning-combobox class="slds-col slds-size_1-of-3 slds-p-horizontal_xx-small"
+                                    name="progress"
+                                    label={gripLabel}
+                                    value={gripValue}
+                                    placeholder={choosePlaceholder}
+                                    options={gripOptions}
+                                    disabled={disabledGrip}
+                                    onchange={handleGripChange} ></lightning-combobox>
+                <lightning-combobox class="slds-col slds-size_1-of-3 slds-p-horizontal_xx-small"
+                                    name="progress"
+                                    label={noiseLabel}
+                                    value={noiseValue}
+                                    placeholder={choosePlaceholder}
+                                    options={noiseOptions}
+                                    disabled={disabledNoise}
+                                    onchange={handleNoiseChange} ></lightning-combobox>
+            </div>
+            <div class="slds-box slds-m-top_small slds-m-left_small" if:true={showSpecificationFilter} style="min-width:312px;">
+                <div class="slds-grid" if:true={showMotoFilter}>
+                    <lightning-combobox class="slds-col slds-size_1-of-2 slds-p-horizontal_xx-small"
+                                        name="progress"
+                                        label={usageLabel}
+                                        value={usageValue}
+                                        placeholder={choosePlaceholder}
+                                        options={usageOptions}
+                                        onchange={handleUsageValueChange} ></lightning-combobox>
+                    <lightning-combobox class="slds-col slds-size_1-of-2 slds-p-horizontal_xx-small"
+                                        name="progress"
+                                        label={rubberLabel}
+                                        value={rubberValue}
+                                        placeholder={choosePlaceholder}
+                                        options={rubberOptions}
+                                        onchange={handleRubberValueChange} ></lightning-combobox>
+                </div>
+                <div class="slds-grid slds-col" if:true={showCarFilter}>
+                    <lightning-combobox class="slds-col slds-size_1-of-3 slds-p-horizontal_xx-small"
+                                        name="progress"
+                                        label={homologationLabel}
+                                        value={homologationValue}
+                                        placeholder={choosePlaceholder}
+                                        options={homologationOptions}
+                                        onchange={handleHomologationValueChange} ></lightning-combobox>
+                    <lightning-combobox class="slds-col slds-size_1-of-3 slds-p-horizontal_xx-small"
+                                        name="progress"
+                                        label={specificationLabel}
+                                        value={specificationValue}
+                                        placeholder={choosePlaceholder}
+                                        options={specificationOptions}
+                                        onchange={handleSpecificationValueChange} ></lightning-combobox>
+                    <div class="slds-col slds-size_1-of-3 slds-p-horizontal_x-small">
+                        <label class="slds-form-element__label" for="checkbox-unique-id-83">{runflatLabel}</label>
+                        <div class="slds-form-element__control">
+                                    <span class="slds-checkbox slds-checkbox_standalone">
+                                    <input type="checkbox" checked={runflatValue} onchange={handlerunflatValueChange} />
+                                    <span class="slds-checkbox_faux"></span>
+                                    </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid" if:true={showCarFilter}>
+                    <div class="slds-col slds-size_1-of-3 slds-p-horizontal_x-small">
+                        <label class="slds-form-element__label" for="checkbox-unique-id-83">{pmsfLabel}</label>
+                        <div class="slds-form-element__control">
+                                    <span class="slds-checkbox slds-checkbox_standalone">
+                                    <input type="checkbox" checked={pmsfValue} onchange={handlePmsfValueChange} />
+                                    <span class="slds-checkbox_faux"></span>
+                                    </span>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3 slds-p-horizontal_x-small">
+                        <label class="slds-form-element__label" for="checkbox-unique-id-83">{sealLabel}</label>
+                        <div class="slds-form-element__control">
+                                    <span class="slds-checkbox slds-checkbox_standalone">
+                                    <input type="checkbox" checked={sealValue} onchange={handleSealValueChange} />
+                                    <span class="slds-checkbox_faux"></span>
+                                    </span>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3 slds-p-horizontal_x-small">
+                        <label class="slds-form-element__label" for="checkbox-unique-id-83">{soundLabel}</label>
+                        <div class="slds-form-element__control">
+                                    <span class="slds-checkbox slds-checkbox_standalone">
+                                    <input type="checkbox" checked={soundValue} onchange={handleSoundValueChange} />
+                                    <span class="slds-checkbox_faux"></span>
+                                    </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid" if:true={showCarFilter}>
+                    <div class="slds-col slds-size_1-of-3 slds-p-horizontal_x-small">
+                        <label class="slds-form-element__label" for="checkbox-unique-id-83">{eltLabel}</label>
+                        <div class="slds-form-element__control">
+                                    <span class="slds-checkbox slds-checkbox_standalone">
+                                    <input type="checkbox" checked={eltValue} onchange={handleEltValueChange} />
+                                    <span class="slds-checkbox_faux"></span>
+                                    </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <template if:true={showNoDataMessage}>
+        <div class="slds-m-top_large">
+            <div class="slds-col slds-size_1-of-3"></div>
+            <div class="slds-col slds-size_1-of-3 slds-align_absolute-center">
+                <div class="slds-text-heading_medium">{noDataMessage}</div>
+            </div>
+        </div>
+    </template>
+
+    <template if:true ={noResults}>
+        <div class="slds-m-top_small slds-align_absolute-center">
+            <lightning-button if:true={showStandard} class="slds-m-left_small" variant="brand" label={standardLabel} onclick={handleStandardBtnClick}></lightning-button>
+            <lightning-button if:false={showStandard} class="slds-m-left_small" variant="neutral" label={standardLabel} onclick={handleStandardBtnClick}></lightning-button>
+            <lightning-button if:true={showBestPrice} class="slds-m-left_small" variant="brand" label={priceLabel} onclick={handlePriceBtnClick}></lightning-button>
+            <lightning-button if:false={showBestPrice} class="slds-m-left_small" variant="neutral" label={priceLabel} onclick={handlePriceBtnClick}></lightning-button>
+            <lightning-button if:true={showFastestDel} class="slds-m-left_small" variant="brand" label={deliveryLabel} onclick={handleDelBtnClick}></lightning-button>
+            <lightning-button if:false={showFastestDel} class="slds-m-left_small" variant="neutral" label={deliveryLabel} onclick={handleDelBtnClick}></lightning-button>
+        </div>
+        <div class="slds-m-top_medium">
+            <table class="nth-table">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>{seasonLabel}</th>
+                    <th style="width: 13% ;">{brandLabel}</th>
+                    <th style="width: 25% ;">{descriptionLabel}</th>
+                    <th style="width: 5% ;"><img style="height : 30px; width:30px" src={fuelImage}/></th>
+                    <th style="width: 5% ;"><img style="height : 30px; width:30px" src={gripImage}/></th>
+                    <th style="width: 6% ;"><img style="height : 30px; width:30px" src={noiseImage}/></th>
+                    <th style="width: 13%;">{supplierLabel}</th>
+                    <th style="width: 9% ;">{listPriceLabel}</th>
+                    <th if:true={showDistributionColonne} style="width: 7% ;">{distributionDiscount}</th>
+                    <th style="width: 10% ;">{salesPriceLabel}</th>
+                    <th style="width: 13% ;">{deliveryDateLabel}</th>
+                    <th>{stockLabel}</th>
+                    <th>{quantityLabel}</th>
+                    <th></th>
+                    <th style="background:white;"></th>
+                </tr>
+                </thead>
+
+                <template if:false={isLoaded}>
+                    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                </template>
+
+                <template for:each={searchResults} for:item="result" for:index="index">
+                    <tbody key={result.id}>
+                    <tr class="productrow descriptiontable">
+                        <td >
+                            <lightning-icon if:true={showDefaultResults} class={assignClass} data-productid={result.id} onclick={showData} icon-name="utility:info" alternative-text="Info" title="Info"></lightning-icon>
+                            <lightning-icon if:false={showDefaultResults} class={assignClass} data-productid={result.parentProductId} onclick={showData} icon-name="utility:info" alternative-text="Info" title="Info"></lightning-icon>
+                        </td>
+                        <td>
+                            <lightning-formatted-rich-text value={result.season} style="width:100%;height:100%" class="image"></lightning-formatted-rich-text>
+                        </td>
+                        <td>
+                            <lightning-formatted-rich-text image value={result.brandLogo} class="image"></lightning-formatted-rich-text>
+                        </td>
+                        <td class="dim">{result.dimension}</td>
+                        <td><a href={result.QReprelLink} target="_blank">{result.fuel}</a></td>
+                        <td><a href={result.QReprelLink} target="_blank">{result.grip}</a></td>
+                        <td><a href={result.QReprelLink} target="_blank">{result.noise}</a></td>
+                        <td>
+                            <lightning-formatted-rich-text class="slds-rich-text-editor__output image" style="width:100%;height:100%" value={result.supplierLogoName}></lightning-formatted-rich-text>
+                        </td>
+                        <td>
+                            <lightning-formatted-number format-style="currency" value={result.listPrice} currency-code="EUR"></lightning-formatted-number>
+                        </td>
+                        <td if:true={showDistributionColonne}>
+                            {result.distributionDiscount}&percnt;
+                        </td>
+                        <td>
+                            <lightning-formatted-number format-style="currency" value={result.salesPrice} currency-code="EUR"></lightning-formatted-number>
+                        </td>
+                        <td>
+                            <lightning-formatted-date-time value={result.deliveryDate} year="2-digit" month="2-digit" day="2-digit"></lightning-formatted-date-time>
+                        </td>
+                        <td>
+                            {result.quantity}
+                        </td>
+                        <td>
+                            <input style="width: 40px ;"
+                                   class="selector-input"
+                                   max={result.quantity}
+                                   value={result.orderQuantity}
+                                   min="1"
+                                   step="1"
+                                   required
+                                   type="number"
+                                   data-index={result.index}
+                                   data-type="wholesaler"
+                                   onchange = {handleQuantityChange}
+                            />
+                        </td>
+                        <td>
+                            <lightning-button-icon
+                                    variant="brand"
+                                    icon-name="utility:cart"
+                                    alternative-text="Add to cart"
+                                    data-index={result.index}
+                                    data-id={result.productId}
+                                    data-price={result.salesPrice}
+                                    data-deliverydate={result.deliveryDate}
+                                    data-orderquantity={result.orderQuantity}
+                                    style="padding:5%;"
+                                    onclick={handleAddToCart}
+                            >
+                            </lightning-button-icon>
+                        </td>
+                        <td style="background:white;"></td>
+                    </tr>
+                    <template for:each={result.wholesalers} for:item="whs">
+                        <tr class="subrow descriptiontable slds-m-left" if:true={whs.showLine} key={whs.id}>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="wholesalerline">
+                                <lightning-formatted-rich-text class="slds-rich-text-editor__output image" style="width:100%;height:100%"  value={result.supplierLogoName}></lightning-formatted-rich-text>
+                            </td>
+                            <td class="wholesalerline"><lightning-formatted-number format-style="currency" value={whs.listPrice} currency-code="EUR"></lightning-formatted-number></td>
+                            <td if:true={showDistributionColonne} class="wholesalerline">{whs.distributionDiscount}&percnt;</td>
+                            <td class="wholesalerline">
+                                <lightning-formatted-number format-style="currency" value={whs.salesPrice} currency-code="EUR"></lightning-formatted-number>
+                            </td>
+                            <td class="wholesalerline">
+                                <lightning-formatted-date-time value={whs.deliveryDate} year="2-digit" month="2-digit" day="2-digit"></lightning-formatted-date-time>
+
+                            </td>
+                            <td class="wholesalerline">
+                                {whs.quantity}
+                            </td>
+                            <td class="wholesalerline">
+                                <input
+                                        class="selector-input" style="width: 40px ;"
+                                        max={whs.quantity}
+                                        value={whs.orderQuantity}
+                                        min="1"
+                                        step="1"
+                                        required
+                                        type="number"
+                                        data-index={whs.index}
+                                        data-productindex={result.index}
+                                        data-type="wholesaler-other"
+                                        onchange = {handleQuantityChange}
+                                />
+                            </td>
+                            <td class="wholesalerline">
+                                <lightning-button-icon
+                                        variant="brand"
+                                        icon-name="utility:cart"
+                                        alternative-text="Add to cart"
+                                        product-index={result.index}
+                                        data-index={result.index}
+                                        data-id={result.productId}
+                                        data-price={whs.salesPrice}
+                                        data-deliverydate={whs.deliveryDate}
+                                        data-orderquantity={whs.orderQuantity}
+                                        style="padding:5%;"
+                                        onclick={handleAddToCart}
+                                >
+                                </lightning-button-icon>
+                            </td>
+                            <td style="background:white;">
+                                <lightning-button-stateful
+                                        if:true={whs.showButton}
+                                        variant="brand"
+                                        onclick={showAllWhsLines}
+                                        label="Toggle Lines"
+                                        data-index={result.index}
+                                        style="padding:5%;"
+                                        label-when-off="More"
+                                        label-when-on="Less"
+                                        selected={whs.buttonState}
+                                ></lightning-button-stateful>
+                            </td>
+                        </tr>
+                    </template>
+                    <template for:each={result.manufacturers} for:item="mfg">
+                        <tr class="subrow descriptiontable" if:true={mfg.showLine} key={mfg.id}>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="manufacturerline"><lightning-formatted-rich-text class="slds-rich-text-editor__output" value={mfg.supplier}></lightning-formatted-rich-text></td>
+                            <td class="manufacturerline"><lightning-formatted-number format-style="currency" value={mfg.listPrice} currency-code="EUR"></lightning-formatted-number></td>
+                            <td if:true={showDistributionColonne} class="manufacturerline">{mfg.distributionDiscount}&percnt;</td>
+                            <td class="manufacturerline">
+                                <lightning-formatted-number format-style="currency" value={mfg.salesPrice} currency-code="EUR"></lightning-formatted-number>
+                            </td>
+                            <td class="manufacturerline">
+                                <lightning-formatted-date-time value={mfg.deliveryDate} year="2-digit" month="2-digit" day="2-digit"></lightning-formatted-date-time>
+                            </td>
+                            <td class="manufacturerline">
+                                {mfg.quantity}
+                            </td>
+                            <td class="manufacturerline">
+                                <input
+                                        class="selector-input"  style="width: 40px ;"
+                                        max={mfg.quantity}
+                                        value={mfg.orderQuantity}
+                                        min="1"
+                                        step="1"
+                                        required
+                                        type="number"
+                                        data-index={mfg.index}
+                                        data-productindex={result.index}
+                                        data-type="manufacturer"
+                                        onchange = {handleQuantityChange}
+                                />
+                            </td>
+                            <td class="manufacturerline">
+                                <lightning-button-icon
+                                        variant="brand"
+                                        icon-name="utility:cart"
+                                        alternative-text="Add to cart"
+                                        data-product-index={result.index}
+                                        data-index={result.index}
+                                        data-id={mfg.productId}
+                                        data-price={mfg.salesPrice}
+                                        data-deliverydate={mfg.deliveryDate}
+                                        data-orderquantity={mfg.orderQuantity}
+                                        style="padding:5%;"
+                                        onclick={handleAddToCart}
+                                >
+                                </lightning-button-icon>
+                            </td>
+                            <td style="background:white;">
+                                <lightning-button-stateful
+                                        if:true={mfg.showButton}
+                                        variant="brand"
+                                        onclick={showAllMfgLines}
+                                        label="Toggle Lines"
+                                        data-index={result.index}
+                                        style="padding:5%;"
+                                        label-when-off="More"
+                                        label-when-on="Less"
+                                        selected={mfg.buttonState}
+                                ></lightning-button-stateful>
+                            </td>
+                        </tr>
+                    </template>
+                    </tbody>
+                </template>
+            </table>
+        </div>
+    </template>
+    <c-product-detail-popover key={result.id} onclose={closePop} topmargin={top} leftmargin={left} myproduct={product} showpop={showpop}></c-product-detail-popover>
+    <div class="slds-float_right slds-size_1-of-1">
+        <template if:true={totalRecords}>
+            <c-pagination if:true={noResults} reset-page={resetPaginationComponent} totalrecords={totalRecords} page-size={pageSize} search-results={searchResultsSize} ongetnextpage={getNextPage} onpagination={handlePagination} onresetpagination={resetPagination}></c-pagination>
+        </template>
+    </div>
+    <div style="margin-top:20px ;"></div>
+</template>
